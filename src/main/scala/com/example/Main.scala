@@ -3,17 +3,20 @@
  */
 package com.example
 
-import org.jfree._
-import org.jfree.chart._
-import org.jfree.data.time._
-import java.util.Date
 import java.io.File
+import java.util.Date
+
+import org.jfree.chart.ChartFactory
+import org.jfree.chart.ChartUtilities
+import org.jfree.data.time.Day
+import org.jfree.data.time.TimeSeries
+import org.jfree.data.time.TimeSeriesCollection
 
 /**
  * @author ashcheglov
  *
  */
-object Main2 {
+object Main {
 	def main(args: Array[String]): Unit = {
 		val series = new TimeSeries("", classOf[Day])
 	        series.add(new Day(new Date("2009/01/01")), 123)

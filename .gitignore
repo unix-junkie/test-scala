@@ -13,3 +13,4 @@ project/plugins/project/
 .scala_dependencies
 .cache
 /*.jpeg
+/test.svg

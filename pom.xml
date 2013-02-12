@@ -117,5 +117,10 @@
 			<artifactId>jfreechart</artifactId>
 			<version>1.0.9</version>
 		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-svggen</artifactId>
+			<version>1.6-1</version>
+		</dependency>
 	</dependencies>
 </project>

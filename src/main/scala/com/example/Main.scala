@@ -1,5 +1,5 @@
 /*-
- * $Id$
+ * $Id: 0c6dc50c803de1ab7d4177d5c5fd0c9eb41a78c6 $
  */
 package com.example
 
@@ -29,6 +29,8 @@ import org.jfree.data.xy.XYDataset
 
 /**
  * @author Andrew ``Bass'' Shcheglov (andrewbass@gmail.com)
+ * @todo Pseudo-3D charts can be implemented using XYPlot and XYBlockRenderer
+ * @todo 3D charts can be implemented using JZY3D (http://www.jzy3d.org/)
  */
 object Main {
 	def main(args: Array[String]): Unit = {

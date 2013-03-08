@@ -122,5 +122,10 @@
 			<artifactId>batik-svggen</artifactId>
 			<version>1.6-1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-api</artifactId>
+			<version>0.9</version>
+		</dependency>
 	</dependencies>
 </project>

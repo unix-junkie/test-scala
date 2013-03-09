@@ -5,6 +5,7 @@ package com.example
 
 import java.awt.Color.BLACK
 import java.awt.Color.GREEN
+import java.awt.Color.RGBtoHSB
 import java.awt.Rectangle
 import java.io.File.separatorChar
 import java.io.File
@@ -38,12 +39,19 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid
 import org.jzy3d.plot3d.builder.Mapper
 import org.jzy3d.plot3d.rendering.canvas.Quality.Advanced
 
+import javax.imageio.ImageIO
+
 /**
  * @author Andrew ``Bass'' Shcheglov (andrewbass@gmail.com)
  * @todo Pseudo-3D charts can be implemented using XYPlot and XYBlockRenderer
  */
 object Main {
 	def main(args: Array[String]): Unit = {
+		plotFunction()
+		plotImage("lena512.bmp")
+	}
+
+	private def plotFunction(): Unit = {
 		/**
 		 * Normalized rectangular function.
 		 *
@@ -83,8 +91,57 @@ object Main {
 		val minArgument = signalStart - 1.0
 		val maxArgument = signalEnd + 1.0
 
-		plot2d(function2d, minArgument, maxArgument, samples, width, height2d, "test", title)
-		plot3d(function3d, minArgument, maxArgument, samples, width, height3d, "." + separatorChar + "test3d.png", title)
+		plot2d(function2d,
+				minArgument, maxArgument,
+				samples,
+				width, height2d, "testFunction",
+				title)
+		plot3d(function3d,
+				minArgument, maxArgument,
+				minArgument, maxArgument,
+				samples, samples,
+				width, height3d, "." + separatorChar + "testFunction3d.png",
+				title)
+	}
+
+	private def plotImage(filename: String): Unit = {
+		val image = ImageIO.read(new File(filename))
+		
+		val width = 1440
+		val height = 900
+
+		val imageWidth = image.getWidth
+		val imageHeight = image.getHeight
+		
+		/**
+		 * @param x
+		 * @param y
+		 */
+		def function3d(xd: Double, yd: Double): Double = {
+			val x: Int = xd.toInt
+			val y: Int = imageHeight - yd.toInt // Otherwise, the image will be transposed
+			if (x < 0 || x >= imageWidth
+					|| y < 0 || y >= imageHeight) {
+				0.0
+			} else {
+				val rgb = image.getRGB(x, y)
+				
+				val red = (rgb >> 16) & 0xff
+				val green = (rgb >> 8) & 0xff
+				val blue = rgb & 0xff;
+				val inputHSB = new Array[Float](3)
+				RGBtoHSB(red, green, blue, inputHSB)
+				val brightness = inputHSB(2)
+				brightness
+			}
+		}
+	
+		plot3d(function3d,
+				0, imageWidth,
+				0, imageHeight,
+				imageWidth, imageHeight,
+				width, height, "." + separatorChar + "testImage3d.png",
+				filename)
 	}
 
 	/**
@@ -126,18 +183,24 @@ object Main {
 
 	/**
 	 * @param f the function to plot
-	 * @param minArgument
-	 * @param maxArgument
-	 * @param samples
+	 * @param minX
+	 * @param maxX
+	 * @param minY
+	 * @param maxY
+	 * @param samplesX
+	 * @param samplesY
 	 * @param screenshotWidth
 	 * @param screenshotHeight
 	 * @param screenshotFilename filename with a mandatory parent dir (otherwise an NPE is thrown).
 	 * @param windowTitle 
 	 */
 	private def plot3d(function3d: (Double, Double) => Double,
-			minArgument: Double,
-			maxArgument: Double,
-			samples: Int,
+			minX: Double,
+			maxX: Double,
+			minY: Double,
+			maxY: Double,
+			samplesX: Int,
+			samplesY: Int,
 			screenshotWidth: Int,
 			screenshotHeight: Int,
 			screenshotFilename: String,
@@ -146,9 +209,10 @@ object Main {
 			override def f(x: Double, y: Double): Double = function3d(x, y)
 		}
 
-		val range = new Range(minArgument, maxArgument)
+		val rangeX = new Range(minX, maxX)
+		val rangeY = new Range(minY, maxY)
 
-		val surface = buildOrthonormal(new OrthonormalGrid(range, samples, range, samples), mapper)
+		val surface = buildOrthonormal(new OrthonormalGrid(rangeX, samplesX, rangeY, samplesY), mapper)
 		val bounds = surface.getBounds()
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), bounds.getZmin(), bounds.getZmax(), new org.jzy3d.colors.Color(1, 1, 1, .5f)))
 		surface.setFaceDisplayed(true)

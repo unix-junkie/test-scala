@@ -1,5 +1,5 @@
 /*-
- * $Id: 0c6dc50c803de1ab7d4177d5c5fd0c9eb41a78c6 $
+ * $Id$
  */
 package com.example
 
@@ -42,16 +42,16 @@ import org.jzy3d.plot3d.rendering.canvas.Quality.Advanced
 import javax.imageio.ImageIO
 
 /**
- * @author Andrew ``Bass'' Shcheglov (andrewbass@gmail.com)
+ * @author Andrew ``Bass&#39;&#39; Shcheglov (andrewbass@gmail.com)
  * @todo Pseudo-3D charts can be implemented using XYPlot and XYBlockRenderer
  */
 object Main {
-	def main(args: Array[String]): Unit = {
+	def main(args: Array[String]) {
 		plotFunction()
 		plotImage("lena512.bmp")
 	}
 
-	private def plotFunction(): Unit = {
+	private def plotFunction() {
 		/**
 		 * Normalized rectangular function.
 		 *
@@ -104,7 +104,7 @@ object Main {
 				title)
 	}
 
-	private def plotImage(filename: String): Unit = {
+	private def plotImage(filename: String) {
 		val image = ImageIO.read(new File(filename))
 		
 		val width = 1440
@@ -114,8 +114,8 @@ object Main {
 		val imageHeight = image.getHeight
 		
 		/**
-		 * @param x
-		 * @param y
+		 * @param xd
+		 * @param yd
 		 */
 		def function3d(xd: Double, yd: Double): Double = {
 			val x: Int = xd.toInt
@@ -128,7 +128,7 @@ object Main {
 				
 				val red = (rgb >> 16) & 0xff
 				val green = (rgb >> 8) & 0xff
-				val blue = rgb & 0xff;
+				val blue = rgb & 0xff
 				val inputHSB = new Array[Float](3)
 				RGBtoHSB(red, green, blue, inputHSB)
 				val brightness = inputHSB(2)
@@ -161,20 +161,20 @@ object Main {
 			screenshotWidth: Int,
 			screenshotHeight: Int,
 			screenshotBasename: String,
-			chartTitle: String): Unit = {
+			chartTitle: String) {
 		val legend = "f(x)"
 		val displayLegend = false
-		val dataset = sampleFunction(function2d, minArgument, maxArgument, samples, "f(x)")
+		val dataset = sampleFunction(function2d, minArgument, maxArgument, samples, legend)
 
 		val fill = true
 		val chart = fill match {
 			case true => createXYAreaChart(chartTitle, "X", "Y", dataset, VERTICAL, displayLegend, true, false)
 			case _ => createXYLineChart(chartTitle, "X", "Y", dataset, VERTICAL, displayLegend, true, false)
 		}
-		val plot = chart.getPlot()
+		val plot = chart.getPlot
 		plot.setBackgroundPaint(BLACK)
 		plot match {
-			case xyPlot: XYPlot => xyPlot.getRenderer().setSeriesPaint(0, GREEN)
+			case xyPlot: XYPlot => xyPlot.getRenderer.setSeriesPaint(0, GREEN)
 		}
 
 		savePng(chart, screenshotBasename + ".png", screenshotWidth, screenshotHeight)
@@ -182,7 +182,7 @@ object Main {
 	}
 
 	/**
-	 * @param f the function to plot
+	 * @param function3d the function to plot
 	 * @param minX
 	 * @param maxX
 	 * @param minY
@@ -204,7 +204,7 @@ object Main {
 			screenshotWidth: Int,
 			screenshotHeight: Int,
 			screenshotFilename: String,
-			windowTitle: String): Unit = {
+			windowTitle: String) {
 		val mapper = new Mapper() {
 			override def f(x: Double, y: Double): Double = function3d(x, y)
 		}
@@ -213,8 +213,8 @@ object Main {
 		val rangeY = new Range(minY, maxY)
 
 		val surface = buildOrthonormal(new OrthonormalGrid(rangeX, samplesX, rangeY, samplesY), mapper)
-		val bounds = surface.getBounds()
-		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), bounds.getZmin(), bounds.getZmax(), new org.jzy3d.colors.Color(1, 1, 1, .5f)))
+		val bounds = surface.getBounds
+		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), bounds.getZmin, bounds.getZmax, new org.jzy3d.colors.Color(1, 1, 1, .5f)))
 		surface.setFaceDisplayed(true)
 		surface.setWireframeDisplayed(false)
 //		surface.setWireframeColor(org.jzy3d.colors.Color.WHITE)
@@ -225,7 +225,7 @@ object Main {
 //		val chartType = "newt"
 //		val chartType = "offscreen," + screenshotWidth + "," + screenshotHeight
 		val chart2 = new Chart(Advanced, chartType)
-		chart2.getScene().getGraph().add(surface)
+		chart2.getScene.getGraph.add(surface)
 //		chart2.getView().setBackgroundColor(org.jzy3d.colors.Color.BLACK)
 
 		val offscreen = chartType.startsWith("offscreen")
@@ -263,8 +263,8 @@ object Main {
 	 * @param width
 	 * @param height
 	 */
-	private def savePng(chart: JFreeChart, filename: String, width: Int, height: Int): Unit = {
-		saveChartAsPNG(new File(filename), chart, width, height);
+	private def savePng(chart: JFreeChart, filename: String, width: Int, height: Int) {
+		saveChartAsPNG(new File(filename), chart, width, height)
 	}
 	
 	/**
@@ -273,8 +273,8 @@ object Main {
 	 * @param width
 	 * @param height
 	 */
-	private def saveSvg(chart: JFreeChart, filename: String, width: Int, height: Int): Unit = {
-		val domImpl = GenericDOMImplementation.getDOMImplementation()
+	private def saveSvg(chart: JFreeChart, filename: String, width: Int, height: Int) {
+		val domImpl = GenericDOMImplementation.getDOMImplementation
 		val document = domImpl.createDocument(null, "svg", null)
 		val svgGraphics = new SVGGraphics2D(document)
 		chart.draw(svgGraphics, new Rectangle(width, height))

@@ -75,14 +75,26 @@
 				<executions>
 					<execution>
 						<id>scala-compile</id>
+
+						<!-- Scala compiled before Java -->
 						<phase>process-resources</phase>
+
+						<!-- Scala compiled after Java -->
+						<!--phase>compile</phase-->
+
 						<goals>
 							<goal>compile</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>scala-test-compile</id>
+
+						<!-- Scala compiled before Java -->
 						<phase>process-test-resources</phase>
+
+						<!-- Scala compiled after Java -->
+						<!--phase>test-compile</phase-->
+
 						<goals>
 							<goal>testCompile</goal>
 						</goals>

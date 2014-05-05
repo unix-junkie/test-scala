@@ -86,13 +86,6 @@
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
-					<execution>
-						<id>package-scaladocs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>doc</goal>
-						</goals>
-					</execution>
 				</executions>
 			</plugin>
 			<plugin>
